@@ -19,7 +19,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Set the project name
-set(CMAKE_PROJECT_NAME log)
+set(CMAKE_PROJECT_NAME hard_i2c)
 
 # Include toolchain file
 include("cmake/gcc-arm-none-eabi.cmake")
@@ -48,6 +48,9 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+    # BSP
+    ## imu
+    BSP/imu/port/imu_port_stm32.c
 
     # easylogger
     Middlewares/easylogger/src/elog.c
