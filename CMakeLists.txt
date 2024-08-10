@@ -28,7 +28,7 @@ include("cmake/gcc-arm-none-eabi.cmake")
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 # Enable CMake support for ASM and C languages
-enable_language(C ASM)
+enable_language(C CXX ASM)
 
 # Core project settings
 project(${CMAKE_PROJECT_NAME})
@@ -50,7 +50,11 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     # BSP
     ## imu
-    BSP/imu/port/imu_port_stm32.c
+    BSP/imu/i2c_dev.cpp
+    BSP/imu/MPU6050.cpp
+    BSP/imu/filters/biquad_filter.c
+    BSP/imu/filters/filter_math.c
+    BSP/imu/port/imu_port_stm32.cpp
 
     # easylogger
     Middlewares/easylogger/src/elog.c
@@ -61,6 +65,11 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
+
+    # BSP
+    ## imu
+    BSP/imu
+    BSP/imu/filters
 
     # EasyLogger include paths
     Middlewares/easylogger/inc
