@@ -61,6 +61,18 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = sizeof(defaultTaskBuffer),
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for imu_thread */
+osThreadId_t imu_threadHandle;
+uint32_t imu_threadBuffer[ 256 ];
+osStaticThreadDef_t imu_threadControlBlock;
+const osThreadAttr_t imu_thread_attributes = {
+  .name = "imu_thread",
+  .cb_mem = &imu_threadControlBlock,
+  .cb_size = sizeof(imu_threadControlBlock),
+  .stack_mem = &imu_threadBuffer[0],
+  .stack_size = sizeof(imu_threadBuffer),
+  .priority = (osPriority_t) osPriorityLow,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -68,6 +80,7 @@ const osThreadAttr_t defaultTask_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
+void imu_task_entry(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -131,6 +144,9 @@ void MX_FREERTOS_Init(void) {
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
+  /* creation of imu_thread */
+  imu_threadHandle = osThreadNew(imu_task_entry, NULL, &imu_thread_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -159,6 +175,24 @@ void StartDefaultTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartDefaultTask */
+}
+
+/* USER CODE BEGIN Header_imu_task_entry */
+/**
+* @brief Function implementing the imu_thread thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_imu_task_entry */
+__weak void imu_task_entry(void *argument)
+{
+  /* USER CODE BEGIN imu_task_entry */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END imu_task_entry */
 }
 
 /* Private application code --------------------------------------------------*/
